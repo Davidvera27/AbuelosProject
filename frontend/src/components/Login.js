@@ -1,6 +1,5 @@
-// Archivo: Login.js
 import React, { useState, useEffect } from 'react';
-import './Login.css'; // Importar estilos
+import './Login.css'; // Import Login-specific styles
 
 const Login = () => {
   const [isLoginActive, setLoginActive] = useState(true);
