@@ -1,0 +1,132 @@
+/* src/components/Registro.css */
+body {
+    background-image: url(../assets/images/bg4.jpg); /* Tu imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Roboto', sans-serif; /* Usamos la fuente Roboto */
+  }
+  
+  .registro-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro con transparencia */
+    backdrop-filter: blur(10px); /* Efecto de vidrio */
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Estilos para los Paneles del acordeón */
+  .ant-collapse-header {
+    background-color: rgba(203, 139, 240, 0.685);
+    color: #ffffff;
+    font-weight: bold;
+  }
+  
+  .ant-collapse-item-active .ant-collapse-header {
+    background-color: rgba(0, 153, 255, 0.5); /* Color cuando el panel está abierto */
+  }
+  
+  .ant-collapse {
+    background-color: transparent;
+    border: none;
+  }
+  
+  /* Estilos para los inputs */
+  .ant-form-item-label > label {
+    color: #46a2fd; /* Azul claro para las etiquetas */
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .ant-input, 
+  .ant-input-number, 
+  .ant-picker, 
+  .ant-select-selector, 
+  .ant-textarea {
+    background-color: rgba(255, 255, 255, 0.2); /* Fondo semi-transparente */
+    color: #000000; /* Texto blanco */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordes claros */
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .ant-input:hover, 
+  .ant-input-number:hover, 
+  .ant-picker:hover, 
+  .ant-select-selector:hover, 
+  .ant-textarea:hover {
+    background-color: rgba(255, 255, 255, 0.4); /* Efecto hover */
+    border-color: #46a2fd; /* Cambio de color de borde al hover */
+  }
+  
+  .ant-input:focus, 
+  .ant-input-number:focus, 
+  .ant-picker:focus, 
+  .ant-select-selector:focus, 
+  .ant-textarea:focus {
+    background-color: rgba(255, 255, 255, 0.5); /* Más claro al hacer focus */
+    border-color: #46a2fd; /* Borde azul */
+    box-shadow: 0 0 8px rgba(70, 162, 253, 0.6); /* Sombra azul suave */
+  }
+  
+  .ant-input::placeholder,
+  .ant-textarea::placeholder {
+    color: rgba(100, 100, 100, 0.7); /* Color de placeholder más claro */
+  }
+  
+  /* Subir foto de perfil */
+  .ant-upload-list-picture-card-container {
+    background: rgba(255, 255, 255, 0.2); /* Fondo transparente para subir imágenes */
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+    color: #fff;
+  }
+  
+  .ant-upload-list-item-info > span {
+    color: #000000; /* Color del texto en la lista de subida de archivos */
+  }
+  
+  .ant-upload-list-picture-card:hover {
+    border-color: #46a2fd; /* Cambio de color de borde al hover */
+  }
+  
+  /* Estilo para el botón de subir */
+  .ant-upload.ant-upload-select-picture-card {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+  }
+  
+  .ant-upload.ant-upload-select-picture-card:hover {
+    border-color: #c346fd; /* Efecto hover en el botón de subir */
+  }
+  
+  /* Botón de enviar */
+  .ant-btn-primary {
+    background-color: #d246fd8c;
+    border-color: #d49dee;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  
+  .ant-btn-primary:hover, .ant-btn-primary:focus {
+    background-color: #b500b5;
+    border-color: #a000b5;
+  }
+  
+  /* Mensaje de error */
+  .ant-form-item-explain-error {
+    color: #ff4d4f;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
