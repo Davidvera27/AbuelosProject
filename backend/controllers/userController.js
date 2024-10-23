@@ -1,17 +1,28 @@
 // backend/controllers/userController.js
 const User = require('../models/userModel');
+const bcrypt = require('bcryptjs');  // Requerido para encriptar contraseñas
 
 // Crear un usuario (primer formulario)
 const createUser = async (req, res) => {
   try {
     const { primer_nombre, segundo_nombre, apellidos, email, password } = req.body;
 
+    // Verificar si el correo ya está en uso
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: `El correo ${email} ya está registrado para ${existingUser.primer_nombre} ${existingUser.apellidos}` });
+    }
+
+    // Encriptar la contraseña antes de guardarla
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const newUser = new User({
       primer_nombre,
       segundo_nombre,
       apellidos,
       email,
-      password,
+      password: hashedPassword,  // Guardar la contraseña encriptada
     });
 
     const savedUser = await newUser.save();
@@ -26,6 +37,13 @@ const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const userUpdates = req.body;
+
+    // Encriptar contraseña si se está actualizando
+    if (userUpdates.password) {
+      const salt = await bcrypt.genSalt(10);
+      userUpdates.password = await bcrypt.hash(userUpdates.password, salt);
+    }
+
     const updatedUser = await User.findByIdAndUpdate(id, userUpdates, { new: true });
 
     if (!updatedUser) {
