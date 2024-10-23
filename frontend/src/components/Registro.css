@@ -129,3 +129,15 @@ body {
   font-size: 12px;
   margin-top: 5px;
 }
+
+/* Estilo para el campo de edad deshabilitado */
+.ant-input-number[disabled] {
+  background-color: rgba(0, 0, 0, 0.2); /* Fondo más oscuro */
+  color: #ebebeb; /* Texto más oscuro */
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.3); /* Mantener bordes claros */
+}
+
+.ant-input-number[disabled]:hover {
+  background-color: rgba(0, 0, 0, 0.2); /* Mantener el mismo color al hacer hover */
+}
