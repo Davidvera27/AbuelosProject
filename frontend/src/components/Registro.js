@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Upload, DatePicker, InputNumber, Collapse, message } from 'antd';
+import { Form, Cascader, Input, Button, Upload, DatePicker, InputNumber, Collapse, Checkbox, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 import './Registro.css';
 
 const { TextArea } = Input;
@@ -9,6 +10,8 @@ const { Panel } = Collapse;
 const Registro = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const [edad, setEdad] = useState(null);  // Estado para la edad calculada
+  const [isAdmin, setIsAdmin] = useState(false);  // Estado para verificar si el usuario es administrador
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -24,6 +27,17 @@ const Registro = () => {
 
   const handleFileChange = ({ fileList }) => {
     setFileList(fileList);
+  };
+
+  // Función para calcular la edad usando dayjs
+  const calcularEdad = (fechaNacimiento) => {
+    if (fechaNacimiento) {
+      const today = dayjs();
+      const birthDate = dayjs(fechaNacimiento);
+      const calculatedAge = today.diff(birthDate, 'year');  // Calcular diferencia en años
+      setEdad(calculatedAge);
+      form.setFieldsValue({ edad: calculatedAge });
+    }
   };
 
   const handleFinish = async (values) => {
@@ -45,6 +59,53 @@ const Registro = () => {
   const handleFinishFailed = (errorInfo) => {
     message.error('Por favor, corrige los errores en el formulario');
     console.log('Errores:', errorInfo);
+  };
+
+  // Opciones para el cascader de "Cargo", "Especialidad", "Estado" y "Profesión"
+  const cargoOptions = [
+    { value: 'psicologia', label: 'Psicólogo(a)' },
+    { value: 'enfermeria', label: 'Enfermero(a)' },
+    { value: 'fisioterapia', label: 'Fisioterapeuta' },
+    { value: 'nutricion', label: 'Nutricionista / Nutriologo(a)' },
+  ];
+
+  const especialidadOptions = [
+    { value: 'opcion1', label: 'Opción 1' },
+    { value: 'opcion2', label: 'Opción 2' },
+    { value: 'opcion3', label: 'Opción 3' },
+    { value: 'opcion4', label: 'Opción 4' },
+  ];
+
+  const estadoOptions = [
+    { value: 'activo', label: 'Activo' },
+    { value: 'inactivo', label: 'Inactivo' },
+  ];
+
+  const profesionOptions = [
+    { value: 'medicina', label: 'Médico' },
+    { value: 'ingenieria', label: 'Ingeniero(a)' },
+    { value: 'docencia', label: 'Docente' },
+    { value: 'abogacia', label: 'Abogado(a)' },
+  ];
+
+  // Función para manejar los cambios en los cascaders
+  const onCascaderChange = (value, selectedOptions, fieldName) => {
+    let selected = selectedOptions.map(option => option.label).join(' / ');
+    if (fieldName === 'cargo' && isAdmin) {
+      selected += ' / Administrador';
+    }
+    form.setFieldsValue({ [fieldName]: selected });
+  };
+
+  // Manejar el cambio del checkbox de administrador
+  const handleAdminChange = (e) => {
+    setIsAdmin(e.target.checked);
+    const currentCargo = form.getFieldValue('cargo') || '';
+    if (e.target.checked && !currentCargo.includes('Administrador')) {
+      form.setFieldsValue({ cargo: currentCargo + ' / Administrador' });
+    } else if (!e.target.checked) {
+      form.setFieldsValue({ cargo: currentCargo.replace(' / Administrador', '') });
+    }
   };
 
   return (
@@ -80,19 +141,23 @@ const Registro = () => {
             </Form.Item>
 
             <Form.Item
-              label="Edad"
-              name="edad"
-              rules={[{ required: true, message: 'Por favor ingrese su edad' }, { type: 'number', min: 1, max: 120 }]}
-            >
-              <InputNumber style={{ width: '100%' }} placeholder="Edad" />
-            </Form.Item>
-
-            <Form.Item
               label="Fecha de Nacimiento"
               name="fecha_nacimiento"
               rules={[{ required: true, message: 'Por favor seleccione la fecha de nacimiento' }]}
             >
-              <DatePicker format="DD/MM/YYYY" style={{ width: '100%' }} />
+              <DatePicker
+                format="DD/MM/YYYY"
+                style={{ width: '100%' }}
+                onChange={(date) => calcularEdad(date)}  // Calcular la edad cuando se selecciona una fecha
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Edad"
+              name="edad"
+              rules={[{ required: true, message: 'La edad es obligatoria' }]}
+            >
+              <InputNumber style={{ width: '100%' }} placeholder="Edad" disabled value={edad} />
             </Form.Item>
           </Panel>
 
@@ -101,17 +166,31 @@ const Registro = () => {
             <Form.Item
               label="Cargo"
               name="cargo"
-              rules={[{ required: true, message: 'Por favor ingrese su cargo' }]}
+              rules={[{ required: true, message: 'Por favor seleccione su cargo' }]}
             >
-              <Input placeholder="Cargo" />
+              <Cascader
+                options={cargoOptions}
+                onChange={(value, selectedOptions) => onCascaderChange(value, selectedOptions, 'cargo')}
+                expandTrigger="hover"
+                placeholder="Seleccione un cargo"
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Checkbox onChange={handleAdminChange}>¿Es administrador?</Checkbox>
             </Form.Item>
 
             <Form.Item
               label="Especialidad"
               name="especialidad"
-              rules={[{ required: true, message: 'Por favor ingrese su especialidad' }]}
+              rules={[{ required: true, message: 'Por favor seleccione su especialidad' }]}
             >
-              <Input placeholder="Especialidad" />
+              <Cascader
+                options={especialidadOptions}
+                onChange={(value, selectedOptions) => onCascaderChange(value, selectedOptions, 'especialidad')}
+                expandTrigger="hover"
+                placeholder="Seleccione una especialidad"
+              />
             </Form.Item>
 
             <Form.Item
@@ -136,17 +215,27 @@ const Registro = () => {
             <Form.Item
               label="Estado"
               name="estado"
-              rules={[{ required: true, message: 'Por favor ingrese su estado' }]}
+              rules={[{ required: true, message: 'Por favor seleccione su estado' }]}
             >
-              <Input placeholder="Estado" />
+              <Cascader
+                options={estadoOptions}
+                onChange={(value, selectedOptions) => onCascaderChange(value, selectedOptions, 'estado')}
+                expandTrigger="hover"
+                placeholder="Seleccione un estado"
+              />
             </Form.Item>
 
             <Form.Item
               label="Profesión"
               name="profesion"
-              rules={[{ required: true, message: 'Por favor ingrese su profesión' }]}
+              rules={[{ required: true, message: 'Por favor seleccione su profesión' }]}
             >
-              <Input placeholder="Profesión" />
+              <Cascader
+                options={profesionOptions}
+                onChange={(value, selectedOptions) => onCascaderChange(value, selectedOptions, 'profesion')}
+                expandTrigger="hover"
+                placeholder="Seleccione una profesión"
+              />
             </Form.Item>
 
             <Form.Item
