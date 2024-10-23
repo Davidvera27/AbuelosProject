@@ -1,5 +1,7 @@
 // backend/models/userModel.js
 const mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const userSchema = mongoose.Schema({
   primer_nombre: { type: String, required: true },
@@ -19,6 +21,15 @@ const userSchema = mongoose.Schema({
   direccion: { type: String },
   foto_perfil: { type: String }, // Para guardar la URL de la imagen
 }, { timestamps: true });
+
+// Middleware para encriptar la contraseña antes de guardar el usuario
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+  const salt = await bcrypt.genSalt(10); // Generar un "salt"
+  this.password = await bcrypt.hash(this.password, salt); // Encriptar la contraseña
+});
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
