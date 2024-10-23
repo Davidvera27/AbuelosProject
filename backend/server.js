@@ -2,8 +2,8 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const userRoutes = require('./routes/userRoutes');
+const connectDB = require('./config/db'); // Conexión a la base de datos
+const userRoutes = require('./routes/userRoutes'); // Rutas de usuarios
 
 // Cargar variables de entorno
 dotenv.config();
