@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2'; // Importamos SweetAlert2
 import './Login.css'; // Import Login-specific styles
 
 const Login = () => {
   const [isLoginActive, setLoginActive] = useState(true);
 
-  // Estado para los campos de registro
   const [registerData, setRegisterData] = useState({
     primer_nombre: '',
     segundo_nombre: '',
     apellidos: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
 
-  // Estado para controlar la activación del botón "Registrarse"
   const [isRegisterButtonDisabled, setRegisterButtonDisabled] = useState(true);
-
-  // Estado para los errores de validación
   const [errors, setErrors] = useState({});
 
-  // Función para cambiar entre Login y Registro
   const toggleLogin = () => {
     setLoginActive(true);
   };
@@ -32,13 +29,20 @@ const Login = () => {
   useEffect(() => {
     const validate = () => {
       let newErrors = {};
-      
+
+      // Validación solo letras
+      const textOnlyRegex = /^[A-Za-z]+$/;
+
       if (!registerData.primer_nombre) {
         newErrors.primer_nombre = 'El primer nombre es obligatorio';
+      } else if (!textOnlyRegex.test(registerData.primer_nombre)) {
+        newErrors.primer_nombre = 'Solo se permiten letras en el primer nombre';
       }
 
       if (!registerData.apellidos) {
         newErrors.apellidos = 'Los apellidos son obligatorios';
+      } else if (!textOnlyRegex.test(registerData.apellidos)) {
+        newErrors.apellidos = 'Solo se permiten letras en los apellidos';
       }
 
       if (!registerData.email) {
@@ -51,24 +55,27 @@ const Login = () => {
         newErrors.password = 'La contraseña es obligatoria';
       }
 
+      if (registerData.password !== registerData.confirmPassword) {
+        newErrors.confirmPassword = 'Las contraseñas no coinciden';
+      }
+
       setErrors(newErrors);
 
-      // Verificar si todos los campos están completos y no hay errores
       if (Object.keys(newErrors).length === 0 &&
           registerData.primer_nombre && 
           registerData.apellidos && 
           registerData.email && 
-          registerData.password) {
-        setRegisterButtonDisabled(false); // Habilitar el botón
+          registerData.password &&
+          registerData.confirmPassword) {
+        setRegisterButtonDisabled(false);
       } else {
-        setRegisterButtonDisabled(true); // Deshabilitar el botón
+        setRegisterButtonDisabled(true);
       }
     };
 
     validate();
   }, [registerData]);
 
-  // Manejar el cambio en los inputs de registro
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setRegisterData({
@@ -77,7 +84,6 @@ const Login = () => {
     });
   };
 
-  // Enviar datos del formulario al backend y redirigir al segundo formulario
   const handleRegister = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/users', {
@@ -89,13 +95,18 @@ const Login = () => {
       });
 
       const result = await response.json();
+      
       if (response.ok) {
-        window.location.href = `/Registro?id=${result._id}`; // Redirigir al segundo formulario con el ID del usuario
+        // Si el registro es exitoso, redirigir a la siguiente página
+        Swal.fire('Registro exitoso', `¡Bienvenido ${registerData.primer_nombre}!`, 'success');
+        window.location.href = `/Registro?id=${result._id}`;
       } else {
-        console.error(result.message);
+        // Si el correo ya está registrado, mostrar el error con SweetAlert2
+        Swal.fire('Error', `El correo electrónico ya está registrado a nombre de ${result.nombre}.`, 'error');
       }
     } catch (error) {
       console.error('Error:', error);
+      Swal.fire('Error', 'Ocurrió un error durante el registro. Inténtalo más tarde.', 'error');
     }
   };
 
@@ -134,7 +145,7 @@ const Login = () => {
                 onChange={handleInputChange} 
               />
               {errors.primer_nombre && <span className="error-message">{errors.primer_nombre}</span>}
-              
+
               <input 
                 type="text" 
                 name="segundo_nombre" 
@@ -142,7 +153,7 @@ const Login = () => {
                 value={registerData.segundo_nombre} 
                 onChange={handleInputChange} 
               />
-              
+
               <input 
                 type="text" 
                 name="apellidos" 
@@ -169,6 +180,15 @@ const Login = () => {
                 onChange={handleInputChange} 
               />
               {errors.password && <span className="error-message">{errors.password}</span>}
+
+              <input 
+                type="password" 
+                name="confirmPassword" 
+                placeholder="Confirmar Contraseña" 
+                value={registerData.confirmPassword} 
+                onChange={handleInputChange} 
+              />
+              {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
 
               <button 
                 type="button" 
