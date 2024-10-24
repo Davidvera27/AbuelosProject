@@ -70,6 +70,7 @@ const Login = () => {
 
       setErrors(newErrors);
 
+      // Validación para habilitar o deshabilitar el botón de registro
       if (Object.keys(newErrors).length === 0 &&
         registerData.primer_nombre &&
         registerData.apellidos &&
