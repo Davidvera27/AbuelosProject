@@ -1,6 +1,5 @@
-/* src/components/Registro.css */
 body {
-  background-image: url(../assets/images/bg4.jpg); /*  imagen de fondo */
+  background-image: url(../assets/images/bg4.jpg); /* Imagen de fondo */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -16,7 +15,6 @@ body {
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   color: #ffffff;
-  font-family: 'Roboto', sans-serif;
 }
 
 /* Estilos para los Paneles del acordeón */
@@ -42,13 +40,13 @@ body {
   font-size: 14px;
 }
 
-.ant-input, 
-.ant-input-number, 
-.ant-picker, 
-.ant-select-selector, 
+.ant-input,
+.ant-input-number,
+.ant-picker,
+.ant-select-selector,
 .ant-textarea {
   background-color: rgba(255, 255, 255, 0.2); /* Fondo semi-transparente */
-  color: #000000; /* Texto blanco */
+  color: #000000;
   border: 1px solid rgba(255, 255, 255, 0.3); /* Bordes claros */
   border-radius: 8px;
   padding: 10px;
@@ -56,19 +54,19 @@ body {
   transition: all 0.3s ease;
 }
 
-.ant-input:hover, 
-.ant-input-number:hover, 
-.ant-picker:hover, 
-.ant-select-selector:hover, 
+.ant-input:hover,
+.ant-input-number:hover,
+.ant-picker:hover,
+.ant-select-selector:hover,
 .ant-textarea:hover {
   background-color: rgba(255, 255, 255, 0.4); /* Efecto hover */
   border-color: #46a2fd; /* Cambio de color de borde al hover */
 }
 
-.ant-input:focus, 
-.ant-input-number:focus, 
-.ant-picker:focus, 
-.ant-select-selector:focus, 
+.ant-input:focus,
+.ant-input-number:focus,
+.ant-picker:focus,
+.ant-select-selector:focus,
 .ant-textarea:focus {
   background-color: rgba(255, 255, 255, 0.5); /* Más claro al hacer focus */
   border-color: #46a2fd; /* Borde azul */
