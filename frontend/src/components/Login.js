@@ -30,19 +30,28 @@ const Login = () => {
     const validate = () => {
       let newErrors = {};
 
-      // Validación solo letras
-      const textOnlyRegex = /^[A-Za-z]+$/;
+      // Permitir letras y hasta 10 palabras con espacios
+      const textOnlyRegex = /^[A-Za-z\s]+$/;
+
+      // Función para contar el número de palabras
+      const countWords = (str) => {
+        return str.trim().split(/\s+/).length;
+      };
 
       if (!registerData.primer_nombre) {
         newErrors.primer_nombre = 'El primer nombre es obligatorio';
       } else if (!textOnlyRegex.test(registerData.primer_nombre)) {
         newErrors.primer_nombre = 'Solo se permiten letras en el primer nombre';
+      } else if (countWords(registerData.primer_nombre) > 10) {
+        newErrors.primer_nombre = 'Se permiten hasta 10 palabras en el primer nombre';
       }
 
       if (!registerData.apellidos) {
         newErrors.apellidos = 'Los apellidos son obligatorios';
       } else if (!textOnlyRegex.test(registerData.apellidos)) {
         newErrors.apellidos = 'Solo se permiten letras en los apellidos';
+      } else if (countWords(registerData.apellidos) > 10) {
+        newErrors.apellidos = 'Se permiten hasta 10 palabras en los apellidos';
       }
 
       if (!registerData.email) {
@@ -62,11 +71,11 @@ const Login = () => {
       setErrors(newErrors);
 
       if (Object.keys(newErrors).length === 0 &&
-          registerData.primer_nombre && 
-          registerData.apellidos && 
-          registerData.email && 
-          registerData.password &&
-          registerData.confirmPassword) {
+        registerData.primer_nombre &&
+        registerData.apellidos &&
+        registerData.email &&
+        registerData.password &&
+        registerData.confirmPassword) {
         setRegisterButtonDisabled(false);
       } else {
         setRegisterButtonDisabled(true);
@@ -95,7 +104,7 @@ const Login = () => {
       });
 
       const result = await response.json();
-      
+
       if (response.ok) {
         // Si el registro es exitoso, redirigir a la siguiente página
         Swal.fire('Registro exitoso', `¡Bienvenido ${registerData.primer_nombre}!`, 'success');
