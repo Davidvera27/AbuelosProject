@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Cascader, Input, Button, Upload, DatePicker, InputNumber, Collapse, Checkbox, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import './Registro.css';
 
@@ -51,6 +51,10 @@ const Registro = () => {
         body: JSON.stringify(values),
       });
       message.success('Registro completado con éxito');
+      
+      // Redirigir al inicio de sesión después del registro exitoso
+      window.location.href = 'http://localhost:3000/';  // Cambia esto según tu ruta de inicio de sesión
+      
     } catch (error) {
       message.error('Error al actualizar los datos');
     }
@@ -123,26 +127,33 @@ const Registro = () => {
             <Form.Item
               label="Primer Nombre"
               name="primer_nombre"
+              tooltip={{ title: "Escribe tu primer nombre", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor ingrese su primer nombre' }]}
             >
-              <Input placeholder="Primer nombre" />
+              <Input placeholder="Ej: Juan" />
             </Form.Item>
 
-            <Form.Item label="Segundo Nombre" name="segundo_nombre">
-              <Input placeholder="Segundo nombre" />
+            <Form.Item
+              label="Segundo Nombre"
+              name="segundo_nombre"
+              tooltip={{ title: "Escribe tu segundo nombre (opcional)", icon: <InfoCircleOutlined /> }}
+            >
+              <Input placeholder="Ej: Andrés" />
             </Form.Item>
 
             <Form.Item
               label="Apellidos"
               name="apellidos"
+              tooltip={{ title: "Escribe tus apellidos completos", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor ingrese sus apellidos' }]}
             >
-              <Input placeholder="Apellidos" />
+              <Input placeholder="Ej: Restrepo Vera" />
             </Form.Item>
 
             <Form.Item
               label="Fecha de Nacimiento"
               name="fecha_nacimiento"
+              tooltip={{ title: "Selecciona tu fecha de nacimiento", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor seleccione la fecha de nacimiento' }]}
             >
               <DatePicker
@@ -155,6 +166,7 @@ const Registro = () => {
             <Form.Item
               label="Edad"
               name="edad"
+              tooltip={{ title: "Edad calculada automáticamente según tu fecha de nacimiento", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'La edad es obligatoria' }]}
             >
               <InputNumber style={{ width: '100%' }} placeholder="Edad" disabled value={edad} />
@@ -166,6 +178,7 @@ const Registro = () => {
             <Form.Item
               label="Cargo"
               name="cargo"
+              tooltip={{ title: "Selecciona tu cargo", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor seleccione su cargo' }]}
             >
               <Cascader
@@ -183,6 +196,7 @@ const Registro = () => {
             <Form.Item
               label="Especialidad"
               name="especialidad"
+              tooltip={{ title: "Selecciona tu especialidad", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor seleccione su especialidad' }]}
             >
               <Cascader
@@ -196,17 +210,19 @@ const Registro = () => {
             <Form.Item
               label="No. Documento"
               name="no_documento"
+              tooltip={{ title: "Ingrese su número de documento", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor ingrese su documento' }]}
             >
-              <Input placeholder="No. Documento" />
+              <Input placeholder="Ej: 12345678" />
             </Form.Item>
 
             <Form.Item
               label="Tarjeta Profesional"
               name="tarjeta_profesional"
+              tooltip={{ title: "Ingrese su tarjeta profesional", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor ingrese su tarjeta profesional' }]}
             >
-              <Input placeholder="Tarjeta Profesional" />
+              <Input placeholder="Ej: TP-123456" />
             </Form.Item>
           </Panel>
 
@@ -215,6 +231,7 @@ const Registro = () => {
             <Form.Item
               label="Estado"
               name="estado"
+              tooltip={{ title: "Seleccione su estado", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor seleccione su estado' }]}
             >
               <Cascader
@@ -228,6 +245,7 @@ const Registro = () => {
             <Form.Item
               label="Profesión"
               name="profesion"
+              tooltip={{ title: "Seleccione su profesión", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor seleccione su profesión' }]}
             >
               <Cascader
@@ -241,25 +259,28 @@ const Registro = () => {
             <Form.Item
               label="Teléfono"
               name="telefono"
+              tooltip={{ title: "Ingrese su número de teléfono", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor ingrese su número de teléfono' }]}
             >
-              <Input placeholder="Teléfono" />
+              <Input placeholder="Ej: +573001234567" />
             </Form.Item>
 
             <Form.Item
               label="Email"
               name="email"
+              tooltip={{ title: "Ingrese un correo electrónico válido", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, type: 'email', message: 'Por favor ingrese un correo válido' }]}
             >
-              <Input placeholder="Email" />
+              <Input placeholder="correo@example.com" />
             </Form.Item>
 
             <Form.Item
               label="Dirección"
               name="direccion"
+              tooltip={{ title: "Ingrese su dirección", icon: <InfoCircleOutlined /> }}
               rules={[{ required: true, message: 'Por favor ingrese su dirección' }]}
             >
-              <TextArea rows={2} placeholder="Dirección" />
+              <TextArea rows={2} placeholder="Ej: Calle 123 #45-67, Ciudad, País" />
             </Form.Item>
           </Panel>
 
